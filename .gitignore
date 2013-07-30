@@ -4,4 +4,15 @@
 TAGS
 db/schema.rb
 log/
+/log/*.log
+/tmp
 db/*.sqlite3
+db/*.swlite3-journal
+/.bundle
+database.yml
+doc/
+*.swp
+.project
+.DS_Store
+.idea
+.secret
