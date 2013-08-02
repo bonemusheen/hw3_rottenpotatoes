@@ -15,12 +15,24 @@ Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   flunk "Unimplemented"
 end
 
-# Make it easier to express checking or unchecking several boxes at once
-#  "When I uncheck the following ratings: PG, G, R"
-#  "When I check the following ratings: G"
-
 When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
-  # HINT: use String#split to split up the rating_list, then
-  #   iterate over the ratings and reuse the "When I check..." or
-  #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
+  rating_list.split(", ").each do |rating|
+    uncheck == "un" ? uncheck("ratings_#{rating}") : check("ratings_#{rating}")
+  end
+end
+
+Then /I should see the following ratings: (.*)/ do |rating_list|
+  rating_list.split(", ").each { |rating| page.body.should match(Regexp.new("<td>#{rating}</td>")) }
+end
+
+Then /I should not see the following ratings: (.*)/ do |rating_list|
+  rating_list.split(", ").each { |rating| page.body.should_not match(Regexp.new("<td>#{rating}</td>")) }
+end
+
+Then /I should not see none of the movies/ do
+  page.body.scan(/<tr>/).length.send(:-, 1).should_not eq 0
+end
+
+Then /I should see all of the movies/ do
+  page.body.scan(/<tr>/).length.send(:-, 1).should eq Movie.all.count
 end
