@@ -12,7 +12,7 @@ end
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  flunk "Unimplemented"
+  page.body.should =~ /#{e1}.*#{e2}/m
 end
 
 When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
